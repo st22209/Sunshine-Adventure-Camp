@@ -1,3 +1,3 @@
-__all__ = ("Record",)
+__all__ = ("Record", "RecordAPI")
 
-from .records import Record
+from .records import Record, RecordAPI
