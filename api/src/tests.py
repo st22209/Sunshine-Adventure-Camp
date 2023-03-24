@@ -36,6 +36,22 @@ def test_db_creation() -> bool:
     return True
 
 
-tests_to_run = [[test_db_creation, [], {}]]
-for test, args, kwargs in tests_to_run:
-    assert test(*args, **kwargs)
+def test_validation() -> None:
+    CAMPER_COUNT_RANGE = (5, 10)
+
+    def validate_camper_count(camper_count: int):
+        start, stop = CAMPER_COUNT_RANGE
+        if start <= camper_count <= stop:
+            return True
+        return False
+
+    for i in range(0, 20):
+        fres = validate_camper_count(i)
+        if i in range(CAMPER_COUNT_RANGE[0], CAMPER_COUNT_RANGE[1] + 1):
+            assert fres
+        else:
+            assert not fres
+
+
+assert test_db_creation()
+test_validation()
