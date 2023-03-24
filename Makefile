@@ -9,3 +9,6 @@ format:
 
 lint:
 	@flake8 ./
+
+run_api:
+	@python3 api/src/main.py
