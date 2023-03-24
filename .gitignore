@@ -48,3 +48,4 @@ lib/*.js
 test/*.js
 *.map
 *.sqlite3*
+*.pytest_cache
