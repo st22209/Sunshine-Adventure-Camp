@@ -3,10 +3,11 @@
 Classes/Models for records in the db
 """
 
-__all__ = ("Record", "RecordAPI")
+__all__ = ("Record", "RecordAPI", "NewRecord")
 
 from fastapi import FastAPI
 from tortoise import fields
+from pydantic import BaseModel
 from tortoise.models import Model
 
 
@@ -42,3 +43,10 @@ class RecordAPI(FastAPI):
                 "url": "https://github.com/st22209/Sunshine-Adventure-Camp/blob/main/LICENSE",
             },
         )
+
+
+class NewRecord(BaseModel):
+    name: str
+    location: str
+    weather: str
+    camper_count: int
