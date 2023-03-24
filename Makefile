@@ -2,7 +2,7 @@ test_py:
 	@pytest -p no:warnings api/src/tests.py
 	
 clean:
-	@find . | grep -E '(__pycache__|\.pyc|\.pyo$|\.DS_Store)' | xargs rm -rf
+	@find . | grep -E '(__pycache__|\.pyc|\.pyo$|\.DS_Store|.pytest_cache)' | xargs rm -rf
 
 format:
 	@black ./
