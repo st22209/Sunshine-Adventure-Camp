@@ -7,8 +7,16 @@ __all__ = ("Record", "RecordAPI", "NewRecord")
 
 from fastapi import FastAPI
 from tortoise import fields
-from pydantic import BaseModel
 from tortoise.models import Model
+from pydantic import BaseModel, validator
+
+from core import InvalidCamperCount
+
+# camper count is between 5 and 10
+# this constant is to validate that range
+# if there is more than the first index or greater than the second index
+# it will raise an error
+CAMPER_COUNT_RANGE = (5, 10)
 
 
 class Record(Model):
@@ -50,3 +58,11 @@ class NewRecord(BaseModel):
     location: str
     weather: str
     camper_count: int
+
+    @validator("camper_count")
+    @classmethod
+    def validate_camper_count(cls, camper_count: int):
+        start, stop = CAMPER_COUNT_RANGE
+        if start <= camper_count <= stop:
+            return camper_count
+        raise InvalidCamperCount(camper_count, CAMPER_COUNT_RANGE)
