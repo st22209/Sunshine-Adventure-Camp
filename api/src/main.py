@@ -15,6 +15,7 @@ from routes import records_endpoint
 
 
 app = RecordAPI(__version__)
+app.include_router(router=records_endpoint)
 
 
 @app.on_event("startup")
@@ -28,6 +29,5 @@ def redirect_to_docs(request: Request) -> RedirectResponse:
 
 
 if __name__ == "__main__":
-    app.include_router(records_endpoint)
-    options = {"app": "main:app", "port": 8443, "reload": True}
+    options = {"app": "main:app", "port": 8443}
     uvicorn.run(**options)
