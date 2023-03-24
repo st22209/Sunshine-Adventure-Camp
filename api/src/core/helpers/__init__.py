@@ -1,3 +1,3 @@
-__all__ = ("InvalidCamperCount",)
+__all__ = ("InvalidCamperCount", "InvalidRecordID")
 
-from .exceptions import InvalidCamperCount
+from .exceptions import InvalidCamperCount, InvalidRecordID

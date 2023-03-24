@@ -17,3 +17,16 @@ class InvalidCamperCount(HTTPException):
         }
 
         super().__init__(status_code, detail)
+
+
+class InvalidRecordID(HTTPException):
+    def __init__(
+        self,
+    ) -> None:
+        status_code = 404
+        detail = {
+            "success": False,
+            "detail": "The record you are trying to get does not exist",
+            "tip": "Recheck the id you provided to make sure no typos",
+        }
+        super().__init__(status_code, detail)
