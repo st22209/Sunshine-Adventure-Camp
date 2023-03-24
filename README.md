@@ -2,7 +2,8 @@
 
 This is the code for my CSC2 practice assessment.  
 The project is split into two parts - the api and the app.  
-Both folders contain a readme which will help you navigate the code. The API contains all the code for actualy managing the data (creating, deleting, editing, getting) while the app provides a gui interface for the user to be able to use the app easily.
+Both folders contain a readme which will help you navigate the code.  
+The API contains all the code for actualy managing the data (creating, deleting, editing, getting) while the app provides a GUI for the user to be able to use the app easily.
 
 ### Scenario:
 Sunshine Adventure Camp is a facility that looks after 11 to 15 year olds during the
