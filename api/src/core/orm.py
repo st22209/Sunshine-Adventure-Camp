@@ -18,7 +18,7 @@ async def init_db() -> None:
 
     await Tortoise.init(
         db_url=f"sqlite://{DB_PATH}",
-        modules={"models": ["core.models.records"]},
+        modules={"models": ["core.records"]},
         timezone="NZ",
     )
     await Tortoise.generate_schemas()

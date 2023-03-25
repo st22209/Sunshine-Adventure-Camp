@@ -18,7 +18,7 @@ def test_db_creation() -> bool:
     run_async(init_db())  # run the init function
 
     # test if the file exists
-    db_path = os.path.join(os.path.dirname(__file__), "core/database", "db.sqlite3")
+    db_path = os.path.join(os.path.dirname(__file__), "core", "db.sqlite3")
     if not os.path.exists(db_path):
         return False
 
