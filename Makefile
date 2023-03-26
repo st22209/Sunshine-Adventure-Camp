@@ -5,10 +5,10 @@ clean:
 	@find . | grep -E '(__pycache__|\.pyc|\.pyo$|\.DS_Store|.pytest_cache)' | xargs rm -rf
 
 format:
-	@black ./
+	@black ./api/
 
 lint:
-	@flake8 ./
+	@flake8 ./api/
 
 run_api:
-	@python3 api/src/main.py
+	@python3 ./api/src/main.py
