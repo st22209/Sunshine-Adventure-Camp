@@ -16,9 +16,7 @@ class InvalidCamperCount(HTTPException):
             "detail": "Camper Count Failed Checks",
             "camper_count_provided": given,
             "tip": "Follow the criteria for camper count",
-            "criteria": [
-                f"Groups are always between {range[0]} and {range[1]} campers"
-            ],
+            "criteria": [f"Groups must be between {range[0]} and {range[1]} campers"],
         }
 
         super().__init__(status_code, detail)
