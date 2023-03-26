@@ -1,13 +1,15 @@
-"""(module) orm
+""" (module) orm
 The purpose of this file is to provide utility functions
 to use with tortoise orm sqlite3 database
 """
 
 import os
+from typing import Final
+
 from tortoise import Tortoise
 
 # path to where the database file will be stored
-DB_PATH = os.path.join(os.path.dirname(__file__), "db.sqlite3")
+DB_PATH: Final = os.path.join(os.path.dirname(__file__), "db.sqlite3")
 
 
 async def init_db() -> None:

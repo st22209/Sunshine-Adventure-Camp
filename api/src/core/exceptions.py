@@ -1,3 +1,8 @@
+""" (module) exceptions
+This file contains exceptions to help give the user a detailed
+explanation of what they did wrong or what went wrong
+"""
+
 __all__ = ("InvalidCamperCount",)
 
 from fastapi import HTTPException

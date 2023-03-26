@@ -1,9 +1,10 @@
-"""
-(module) records
+""" (module) records
 Classes/Models for records in the db
 """
 
 __all__ = ("Record", "RecordAPI", "NewRecord")
+
+from typing import Final
 
 from fastapi import FastAPI
 from tortoise import fields
@@ -12,11 +13,12 @@ from pydantic import BaseModel, validator
 
 from core import InvalidCamperCount
 
-# camper count is between 5 and 10
-# this constant is to validate that range
-# if there is more than the first index or greater than the second index
-# it will raise an error
-CAMPER_COUNT_RANGE = (5, 10)
+# if there is more than the first index or greater than the second index it will raise an error
+# it is defined as a constant to be easy to change
+CAMPER_COUNT_RANGE: Final = (
+    5,
+    10,
+)  # in the senario campers are between 5 - 10 so those are the numbers here
 
 
 class Record(Model):
@@ -33,6 +35,11 @@ class Record(Model):
     camper_count = fields.IntField()
 
     class Meta:
+        """
+        This overwrites the default table name (the class name "Record")
+            and sets it to "records" instead
+        """
+
         table = "records"
 
 
@@ -54,6 +61,12 @@ class RecordAPI(FastAPI):
 
 
 class NewRecord(BaseModel):
+    """
+    This class represents a new record in the database
+    When someone creates a new record the attributes in this
+    class is what the user must provide
+    """
+
     name: str
     location: str
     weather: str
@@ -61,8 +74,20 @@ class NewRecord(BaseModel):
 
     @validator("camper_count")
     @classmethod
-    def validate_camper_count(cls, camper_count: int):
+    def validate_camper_count(cls, camper_count: int) -> int:
+        """
+        Make sure there is not to less or to many campers
+
+        Returns:
+            int: The camper count if it passed vallidation
+
+        Raises:
+            InvalidCamperCount: If it failed to validate
+        """
+
         start, stop = CAMPER_COUNT_RANGE
         if start <= camper_count <= stop:
             return camper_count
+
+        # if there is to many campers raise this error
         raise InvalidCamperCount(camper_count, CAMPER_COUNT_RANGE)

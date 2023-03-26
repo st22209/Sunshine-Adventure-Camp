@@ -1,5 +1,6 @@
 import os
 import sqlite3
+from typing import Final
 
 from tortoise import run_async
 
@@ -37,7 +38,12 @@ def test_db_creation() -> bool:
 
 
 def test_validation() -> None:
-    CAMPER_COUNT_RANGE = (5, 10)
+    """
+    This function tests out the validate camper function
+    But giving it a bunch of inputs and checks if it gave the correct one
+    """
+
+    CAMPER_COUNT_RANGE: Final = (5, 10)
 
     def validate_camper_count(camper_count: int):
         start, stop = CAMPER_COUNT_RANGE
