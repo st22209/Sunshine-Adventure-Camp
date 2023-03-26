@@ -1,4 +1,4 @@
-import { Home, Create, View } from "./components";
+import { Home, Create, View, Logs } from "./components";
 import { AnimatePresence, motion } from "framer-motion";
 import { BrowserRouter, Routes, Route, useLocation } from "react-router-dom";
 
@@ -16,6 +16,7 @@ export const AnimatedRoutes = () => {
 					<Route path="/" element={<Home />}></Route>
 					<Route path="/radio-in" element={<Create />}></Route>
 					<Route path="/records" element={<View />}></Route>
+					<Route path="/logs" element={<Logs />}></Route>
 				</Routes>
 			</motion.div>
 		</AnimatePresence>
