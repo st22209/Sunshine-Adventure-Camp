@@ -10,6 +10,7 @@ from fastapi import FastAPI
 from tortoise import fields
 from tortoise.models import Model
 from pydantic import BaseModel, validator
+from fastapi.middleware.cors import CORSMiddleware
 
 from core import InvalidCamperCount
 
@@ -58,6 +59,13 @@ class RecordAPI(FastAPI):
                 "url": "https://github.com/st22209/Sunshine-Adventure-Camp/blob/main/LICENSE",
             },
         )
+        cors_options = {
+            "allow_origins": ["*"],
+            "allow_methods": ["*"],
+            "allow_headers": ["*"],
+            "allow_credentials": True,
+        }
+        self.add_middleware(CORSMiddleware, **cors_options)
 
 
 class NewRecord(BaseModel):
