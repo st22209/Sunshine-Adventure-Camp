@@ -22,6 +22,20 @@ class InvalidCamperCount(HTTPException):
         super().__init__(status_code, detail)
 
 
+class StringToSmall(HTTPException):
+    def __init__(self, given: str, min_length: int) -> None:
+        status_code = 422
+        detail = {
+            "success": False,
+            "detail": "One of the string's you provided failed checks",
+            "provided_value": given,
+            "tip": "Follow the criteria bellow",
+            "criteria": f"Strings must be more than {min_length} characters!",
+        }
+
+        super().__init__(status_code, detail)
+
+
 class InvalidRecordID(HTTPException):
     def __init__(
         self,
