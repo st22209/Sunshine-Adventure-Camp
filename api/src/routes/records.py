@@ -75,7 +75,7 @@ async def get_existing_record(
 
         return {"success": True, "record": converted_record}
 
-    all_db_records = await Record.all()
+    all_db_records = await Record.all().order_by("timestamp")
     if not convert_timestamp:
         # return normal records to the user (not converted)
         return {"success": True, "records": all_db_records}
