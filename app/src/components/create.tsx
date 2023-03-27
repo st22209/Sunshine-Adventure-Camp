@@ -33,6 +33,7 @@ const Create = () => {
 				throw new Error();
 			}
 			alert("Record Created Successfuly!");
+			window.location.href = '/';
 		} catch {
 			alert(
 				"An unexpected error occured while trying to create a record please try again later"
@@ -46,7 +47,7 @@ const Create = () => {
 				Sunshine Adventure Camp
 			</h1>
 			<div className="bg-white w-[70%] h-[35rem] rounded-xl shadow-lg">
-				<h1 className="mt-10 text-xl">Create Record</h1>
+				<h1 className="mt-10 text-3xl font-bold text-purple-700">Create Record</h1>
 				<form className="mt-6" onSubmit={handleSubmit}>
 					<div className="mb-2">
 						<label className="block text-sm font-semibold text-gray-800">
@@ -55,6 +56,8 @@ const Create = () => {
 						<input
 							className="px-4 py-2 mt-2 text-indigo-700 bg-white border rounded-md focus:border-indigo-400 focus:ring-indigo-300 focus:outline-none focus:ring focus:ring-opacity-40"
 							value={name}
+							minLength={3}
+							required
 							onChange={(e) => setName(e.target.value)}
 						/>
 					</div>
@@ -65,6 +68,8 @@ const Create = () => {
 						<input
 							className="px-4 py-2 mt-2 text-indigo-700 bg-white border rounded-md focus:border-indigo-400 focus:ring-indigo-300 focus:outline-none focus:ring focus:ring-opacity-40"
 							value={location}
+							minLength={3}
+							required
 							onChange={(e) => setLocation(e.target.value)}
 						/>
 					</div>
@@ -75,7 +80,9 @@ const Create = () => {
 						<input
 							className="px-4 py-2 mt-2 text-indigo-700 bg-white border rounded-md focus:border-indigo-400 focus:ring-indigo-300 focus:outline-none focus:ring focus:ring-opacity-40"
 							value={weather}
+							minLength={3}
 							onChange={(e) => setWeather(e.target.value)}
+							required
 						/>
 					</div>
 					<div className="mb-2">
@@ -89,6 +96,7 @@ const Create = () => {
 							type="number"
 							min={5}
 							max={10}
+							required
 						/>
 					</div>
 
