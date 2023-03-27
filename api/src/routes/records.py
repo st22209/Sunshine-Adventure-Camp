@@ -57,6 +57,7 @@ async def get_existing_record(
     This endpoint gets and existing record from the database
     it can also get all the records from the db
     """
+
     record_pyd = pydantic_model_creator(Record, name="Record")
 
     if record_id is not None:
@@ -91,3 +92,29 @@ async def get_existing_record(
 
     # return converted records to the user
     return {"success": True, "records": all_records}
+
+
+@records_endpoint.patch("/")
+async def update_existing_record(request: Request, record_id: int, new_data: dict):
+    record = await Record.get(id=record_id)
+    if record is None:  # record doesnt exist
+        raise InvalidRecordID
+
+    update_data = {}
+
+    attrs = ["name", "location", "weather", "camper_count"]
+    for attr, new_val in new_data.items():
+        if attr not in attrs:
+            continue
+
+        attrs.remove(attr)
+        update_data[attr] = new_val
+
+    # validate the new data
+    NewRecord(**update_data, **{attr: getattr(record, attr) for attr in attrs})
+
+    # if it passed validation update the db
+    record.update_from_dict(update_data)
+    await record.save()
+
+    return {"success": True, "detail": "The record has been updated!"}
