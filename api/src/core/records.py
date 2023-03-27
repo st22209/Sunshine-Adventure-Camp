@@ -103,7 +103,7 @@ class NewRecord(BaseModel):
 
     @validator("name", "location", "weather")
     @classmethod
-    async def validate_strings(cls, string: str) -> str:
+    def validate_strings(cls, string: str) -> str:
         """
         Make sure that the string provided for name, location or weather is not too short
 
