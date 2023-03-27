@@ -12,7 +12,7 @@ from tortoise.models import Model
 from pydantic import BaseModel, validator
 from fastapi.middleware.cors import CORSMiddleware
 
-from core import InvalidCamperCount
+from core import InvalidCamperCount, StringToSmall
 
 # if there is more than the first index or greater than the second index it will raise an error
 # it is defined as a constant to be easy to change
@@ -20,6 +20,7 @@ CAMPER_COUNT_RANGE: Final = (
     5,
     10,
 )  # in the senario campers are between 5 - 10 so those are the numbers here
+MIN_STRING = 3  # smallest value a string field eg name or location can be
 
 
 class Record(Model):
@@ -99,3 +100,21 @@ class NewRecord(BaseModel):
 
         # if there is to many campers raise this error
         raise InvalidCamperCount(camper_count, CAMPER_COUNT_RANGE)
+
+    @validator("name", "location", "weather")
+    @classmethod
+    async def validate_strings(cls, string: str) -> str:
+        """
+        Make sure that the string provided for name, location or weather is not too short
+
+        Returns:
+            str: If the string passed validation
+
+        Raises:
+            StringTooSmall: If the string is too small
+        """
+
+        if len(string) < MIN_STRING:
+            raise StringToSmall(string, min_length=MIN_STRING)
+
+        return string
