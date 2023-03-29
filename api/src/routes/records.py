@@ -99,6 +99,10 @@ async def get_existing_record(
 
 @records_endpoint.patch("/")
 async def update_existing_record(request: Request, record_id: int, new_data: dict):
+    """
+    This endpoint updates an already existing record in the database with new data
+    """
+
     record = await Record.get(id=record_id)
     if record is None:  # record doesnt exist
         raise InvalidRecordID
@@ -125,6 +129,10 @@ async def update_existing_record(request: Request, record_id: int, new_data: dic
 
 @records_endpoint.get("/export")
 async def export_data_to_csv(request: Request, convert_timestamp: bool = False):
+    """
+    This endpoint exports the database to a csv and returns it as a downloadable file
+    """
+
     record_pyd = pydantic_model_creator(Record, name="Record")
 
     all_db_records = await Record.all().order_by("timestamp")
