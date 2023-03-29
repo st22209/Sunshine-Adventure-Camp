@@ -26,7 +26,7 @@ function Logs() {
 	return (
 		<div className="bg-red-600">
 			<div className="flex justify-center">
-				<ul className="w-96">
+				<ul>
 					{data[0] !== undefined ? (
 						<li className="w-full p-4 bg-blue-100 ">
 							{new Date(data[0].timestamp).toLocaleString()}:{" "}
