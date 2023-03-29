@@ -4,9 +4,12 @@ Endpoints for creating, deleting, updating, and getting records
 
 __all__ = ("records_endpoint",)
 
+import io
+import csv
 from typing import Optional
 
 from fastapi import APIRouter, Request
+from fastapi.responses import PlainTextResponse
 from tortoise.contrib.pydantic import pydantic_model_creator  # type: ignore
 
 from core import NewRecord, Record, InvalidRecordID
@@ -118,3 +121,28 @@ async def update_existing_record(request: Request, record_id: int, new_data: dic
     await record.save()
 
     return {"success": True, "detail": "The record has been updated!"}
+
+
+@records_endpoint.get("/export")
+async def export_data_to_csv(request: Request, convert_timestamp: bool = False):
+    record_pyd = pydantic_model_creator(Record, name="Record")
+
+    all_db_records = await Record.all().order_by("timestamp")
+    all_records = []
+
+    for record in all_db_records:
+        conv_rec = (await record_pyd.from_tortoise_orm(record)).dict()
+        if convert_timestamp:
+            conv_rec["timestamp"] = record.timestamp.timestamp() * 1000
+        all_records.append(conv_rec)
+
+    # write data to csv:
+    export_file = io.StringIO()  # in memory buffer
+    keys = all_records[0].keys()
+
+    dict_writer = csv.DictWriter(export_file, keys)
+    dict_writer.writeheader()
+    dict_writer.writerows(all_records)  # write data
+
+    # return as file
+    return PlainTextResponse(export_file.getvalue(), media_type="text/csv")
