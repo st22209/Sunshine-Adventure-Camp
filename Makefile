@@ -12,3 +12,6 @@ lint:
 
 run_api:
 	@python3 ./api/src/main.py
+
+run_gui:
+	@cd app; npm run dev
