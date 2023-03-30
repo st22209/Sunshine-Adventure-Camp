@@ -7,12 +7,13 @@ __all__ = ("records_endpoint",)
 import io
 import csv
 from typing import Optional
+from datetime import datetime
 
 from fastapi import APIRouter, Request
 from fastapi.responses import PlainTextResponse
 from tortoise.contrib.pydantic import pydantic_model_creator  # type: ignore
 
-from core import NewRecord, Record, InvalidRecordID
+from core import NewRecord, Record, InvalidRecordID, InvalidDate
 
 
 records_endpoint = APIRouter(
@@ -54,7 +55,11 @@ async def delete_existing_record(request: Request, record_id: int):
 
 @records_endpoint.get("/")
 async def get_existing_record(
-    request: Request, record_id: Optional[int] = None, convert_timestamp: bool = False
+    request: Request,
+    record_id: Optional[int] = None,
+    convert_timestamp: bool = False,
+    camper_name: Optional[str] = None,
+    date: Optional[str] = None,
 ):
     """
     This endpoint gets and existing record from the database
@@ -70,21 +75,42 @@ async def get_existing_record(
 
         record = await Record.get(id=record_id)
         if not convert_timestamp:  # if they chose not to convert the value
-            # return it how it is
             return {"success": True, "record": record}
 
-        # they chose to convert it
+        # if they chose to convert it
         converted_record = (await record_pyd.from_tortoise_orm(record)).dict()
         converted_record["timestamp"] = record.timestamp.timestamp() * 1000
 
         return {"success": True, "record": converted_record}
 
-    all_db_records = await Record.all().order_by("timestamp")
+    if camper_name is not None:
+        all_db_records = (
+            await Record.all().order_by("timestamp").filter(name=camper_name)
+        )
+    else:
+        all_db_records = await Record.all().order_by("timestamp")
+
+    if date is not None:
+        try:
+            search_date = datetime.strptime(date, "%d/%m")
+        except ValueError:
+            raise InvalidDate
+        all_db_records = list(
+            filter(
+                lambda record: all(
+                    [
+                        record.timestamp.day == search_date.day,
+                        record.timestamp.month == search_date.month,
+                    ]
+                ),
+                all_db_records,
+            )
+        )
+
     if not convert_timestamp:
         # return normal records to the user (not converted)
         return {"success": True, "records": all_db_records}
 
-    # they chose to covert it
     all_records = []
     for record in all_db_records:
         # convert all the timestamps from strings to timestamp integers
