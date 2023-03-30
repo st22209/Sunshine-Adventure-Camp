@@ -3,24 +3,39 @@ This file contains exceptions to help give the user a detailed
 explanation of what they did wrong or what went wrong
 """
 
+__all__ = ("InvalidCamperCount", "InvalidRecordID", "StringToSmall", "InvalidDate")
+
 from fastapi import HTTPException
 
 
 class InvalidCamperCount(HTTPException):
+    """
+    This exception is raised when a user enters an invalid camper count
+    for example the camper count range is between 5 and 10 campers
+    if the user were to provide an input of 12 campers, this exception would be raised
+    """
+
     def __init__(self, given: int, range: tuple[int, int]) -> None:
         status_code = 422
+
+        smallest, largest = range
         detail = {
             "success": False,
             "detail": "Camper Count Failed Checks",
             "camper_count_provided": given,
             "tip": "Follow the criteria for camper count",
-            "criteria": [f"Groups must be between {range[0]} and {range[1]} campers"],
+            "criteria": f"Groups must be between {smallest} and {largest} campers",
         }
 
         super().__init__(status_code, detail)
 
 
 class StringToSmall(HTTPException):
+    """
+    This exception is raised when a user enters a string that is too short
+     i mean average sized
+    """
+
     def __init__(self, given: str, min_length: int) -> None:
         status_code = 422
         detail = {
@@ -35,6 +50,12 @@ class StringToSmall(HTTPException):
 
 
 class InvalidRecordID(HTTPException):
+    """
+    This exception is raised when a user requests that does not exist in the database
+     Each record has an id, so when a user searches for a record with a specific id
+      and that record in not in the database, this exception is raised
+    """
+
     def __init__(
         self,
     ) -> None:
@@ -48,6 +69,12 @@ class InvalidRecordID(HTTPException):
 
 
 class InvalidDate(HTTPException):
+    """
+    This exception is raised when an invalid date is provided, or the date is not in the correct format
+     For example someone enters the date in format m/d which is an inferior format, *COUGH* *COUGH* USA
+      Then this exception is raised to tell them that they are wrong and to get better
+    """
+
     def __init__(
         self,
     ) -> None:

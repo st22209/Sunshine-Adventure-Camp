@@ -3,6 +3,8 @@ The purpose of this file is to provide utility functions
 to use with tortoise orm sqlite3 database
 """
 
+__all__ = ("init_db",)
+
 import os
 from typing import Final
 

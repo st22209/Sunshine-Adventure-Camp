@@ -25,9 +25,17 @@ records_endpoint = APIRouter(
 
 
 @records_endpoint.post("/")
-async def create_new_record(request: Request, data: NewRecord):
+async def create_new_record(request: Request, data: NewRecord) -> dict:
     """
     This endpoint creates a new record in the database
+
+    Parameters:
+        data (NewRecord): {
+            name (str): The name of the camper group leader
+            location (str): The location where you're radio inning from
+            weather (str): The weather conditions at your location
+            camper_count (int): The amount of campers with yout
+        }
     """
 
     await Record.create(
@@ -40,9 +48,12 @@ async def create_new_record(request: Request, data: NewRecord):
 
 
 @records_endpoint.delete("/")
-async def delete_existing_record(request: Request, record_id: int):
+async def delete_existing_record(request: Request, record_id: int) -> dict:
     """
     This endpoint deletes an endpoint
+
+    Parameters:
+        record_id (int): ID of the record that you want to delete
     """
 
     exists = await Record.exists(id=record_id)
@@ -60,10 +71,16 @@ async def get_existing_record(
     convert_timestamp: bool = False,
     camper_name: Optional[str] = None,
     date: Optional[str] = None,
-):
+) -> dict:
     """
     This endpoint gets and existing record from the database
     it can also get all the records from the db
+
+    Parameters:
+        record_id (Optional[int]): The ID of the record to fetch
+        convert_timestamp (bool, Default=False): If set to true all returned values will be converted to an integer
+        camper_name (Optional[int]): If provided the returned records will be filtered by the camper count
+        date (Optional[int]): If provided the returned records will be filtered by the date Format: dd/mm
     """
 
     record_pyd = pydantic_model_creator(Record, name="Record")
@@ -124,9 +141,15 @@ async def get_existing_record(
 
 
 @records_endpoint.patch("/")
-async def update_existing_record(request: Request, record_id: int, new_data: dict):
+async def update_existing_record(
+    request: Request, record_id: int, new_data: dict
+) -> dict:
     """
     This endpoint updates an already existing record in the database with new data
+
+    Parameters:
+        record_id (int): The id of the record that you are updating
+        new_data (dict): A dictionary with the values to update as the key and values as the new value
     """
 
     record = await Record.get(id=record_id)
@@ -157,6 +180,9 @@ async def update_existing_record(request: Request, record_id: int, new_data: dic
 async def export_data_to_csv(request: Request, convert_timestamp: bool = False):
     """
     This endpoint exports the database to a csv and returns it as a downloadable file
+
+    Parameters:
+        convert_timestamp (bool): Weather the output csv will have the timestamps as integers
     """
 
     record_pyd = pydantic_model_creator(Record, name="Record")

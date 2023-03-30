@@ -15,7 +15,6 @@ from fastapi.middleware.cors import CORSMiddleware
 from core import InvalidCamperCount, StringToSmall
 
 # if there is more than the first index or greater than the second index it will raise an error
-# it is defined as a constant to be easy to change
 CAMPER_COUNT_RANGE: Final = (
     5,
     10,
@@ -26,7 +25,7 @@ MIN_STRING = 3  # smallest value a string field eg name or location can be
 class Record(Model):
     """
     This class represents the records table in the database
-    Its also shows what a single record would look like
+     Its also shows what a single record would look like
     """
 
     id = fields.IntField(pk=True, generated=True)
@@ -39,7 +38,7 @@ class Record(Model):
     class Meta:
         """
         This overwrites the default table name (the class name "Record")
-            and sets it to "records" instead
+         and sets it to "records" instead
         """
 
         table = "records"
@@ -48,6 +47,7 @@ class Record(Model):
 class RecordAPI(FastAPI):
     """
     This is a subclass of fastapi.FastAPI
+     It includes CORS support and metadata for the swagger docs
     """
 
     def __init__(self, version: str) -> None:
@@ -72,8 +72,8 @@ class RecordAPI(FastAPI):
 class NewRecord(BaseModel):
     """
     This class represents a new record in the database
-    When someone creates a new record the attributes in this
-    class is what the user must provide
+     When someone creates a new record the attributes in this
+     class is what the user must provide
     """
 
     name: str
@@ -86,6 +86,9 @@ class NewRecord(BaseModel):
     def validate_camper_count(cls, camper_count: int) -> int:
         """
         Make sure there is not to less or to many campers
+
+        Parameters:
+            camper_count (int): This is the amount of campers
 
         Returns:
             int: The camper count if it passed vallidation
@@ -106,6 +109,9 @@ class NewRecord(BaseModel):
     def validate_strings(cls, string: str) -> str:
         """
         Make sure that the string provided for name, location or weather is not too short
+
+        Parameters:
+            string (str): The string that will be validated
 
         Returns:
             str: If the string passed validation
