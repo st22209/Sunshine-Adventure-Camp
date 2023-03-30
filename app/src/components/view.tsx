@@ -212,16 +212,31 @@ const View = () => {
 											).toLocaleString()}
 										</th>
 										<td className="px-6 py-4">
-											{record.name}
+											{record.name.length < 70
+												? record.name
+												: `${record.name.slice(
+														0,
+														70
+												  )}...`}
 										</td>
 										<td className="px-6 py-4">
 											{record.camper_count}
 										</td>
 										<td className="px-6 py-4">
-											{record.location}
+											{record.location.length < 70
+												? record.location
+												: `${record.location.slice(
+														0,
+														70
+												  )}...`}
 										</td>
 										<td className="px-6 py-4">
-											{record.weather}
+											{record.weather.length < 70
+												? record.weather
+												: `${record.weather.slice(
+														0,
+														70
+												  )}...`}
 										</td>
 										<td className="px-6 py-4">
 											<button
