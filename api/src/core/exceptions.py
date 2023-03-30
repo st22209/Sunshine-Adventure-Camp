@@ -3,8 +3,6 @@ This file contains exceptions to help give the user a detailed
 explanation of what they did wrong or what went wrong
 """
 
-__all__ = ("InvalidCamperCount",)
-
 from fastapi import HTTPException
 
 
@@ -45,5 +43,18 @@ class InvalidRecordID(HTTPException):
             "success": False,
             "detail": "The record you are trying to get does not exist",
             "tip": "Recheck the id you provided to make sure no typos",
+        }
+        super().__init__(status_code, detail)
+
+
+class InvalidDate(HTTPException):
+    def __init__(
+        self,
+    ) -> None:
+        status_code = 404
+        detail = {
+            "success": False,
+            "detail": "The date provided is an invalid date it must be in format: d/m",
+            "tip": "Format: dd/mm. Example: 29/03",
         }
         super().__init__(status_code, detail)
