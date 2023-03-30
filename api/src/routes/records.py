@@ -43,7 +43,7 @@ async def create_new_record(request: Request, data: NewRecord) -> dict:
         location=data.location,
         weather=data.weather,
         camper_count=data.camper_count,
-    )  # create a new record in the database
+    )
     return {"success": True, "detail": "Record created successfully!"}
 
 
@@ -60,7 +60,9 @@ async def delete_existing_record(request: Request, record_id: int) -> dict:
     if not exists:  # if the record doen't exist in the db
         raise InvalidRecordID
 
-    await Record.filter(id=record_id).delete()  # delete the record
+    record = Record.filter(id=record_id)
+    await record.delete()
+
     return {"success": True, "detail": "Record deleted successfully!"}
 
 
@@ -87,7 +89,7 @@ async def get_existing_record(
 
     if record_id is not None:
         exists = await Record.exists(id=record_id)
-        if not exists:  # if the record doen't exist in the db
+        if not exists:
             raise InvalidRecordID
 
         record = await Record.get(id=record_id)
@@ -202,7 +204,7 @@ async def export_data_to_csv(request: Request, convert_timestamp: bool = False):
 
     dict_writer = csv.DictWriter(export_file, keys)
     dict_writer.writeheader()
-    dict_writer.writerows(all_records)  # write data
+    dict_writer.writerows(all_records)
 
     # return as file
     return PlainTextResponse(export_file.getvalue(), media_type="text/csv")
