@@ -1,25 +1,31 @@
-import { useState, useEffect } from "react";
-import getData from "./getData";
+import {
+	refreshDataLoop,
+	getOneRecord,
+	editOneRecord,
+	deleteOneRecord,
+} from "./requests";
 import { motion } from "framer-motion";
+import { useState, useEffect } from "react";
 
 const View = () => {
-	interface dataTypes {
-		location: string;
-		weather: string;
-		name: string;
-		camper_count: number;
+	interface Record {
 		id: number;
+		name: string;
+		weather: string;
+		location: string;
 		timestamp: number;
+		camper_count: number;
 	}
+
+	type recordList = Array<Record>;
 
 	interface ModalData {
 		showModal: boolean;
 		recordId: number | null;
-		data: dataTypes | null;
+		data: Record | null;
 	}
 
-	type dataType = Array<dataTypes>;
-	const [data, setData] = useState<dataType>([]);
+	const [data, setData] = useState<recordList>([]);
 	const [modalData, setModalData] = useState<ModalData>({
 		showModal: false,
 		recordId: null,
@@ -31,19 +37,10 @@ const View = () => {
 	const [weather, setWeather] = useState("");
 	const [count, setCount] = useState("");
 
-	useEffect(() => {
-		getData(setData);
-		let interval = setInterval(() => {
-			getData(setData);
-		}, 5000); // make a request every 5 sec to check for new logs
-		return () => {
-			clearInterval(interval);
-		};
-	}, []);
+	useEffect(() => refreshDataLoop(setData), []);
 
-	const handleSubmit = async (e: React.FormEvent<HTMLFormElement>) => {
+	async function handleSubmit(e: React.FormEvent<HTMLFormElement>) {
 		e.preventDefault();
-		const API_URL = `http://127.0.0.1:8443/api/v1/records/?record_id=${modalData.recordId}`;
 
 		let data = JSON.stringify({
 			name: name,
@@ -51,91 +48,40 @@ const View = () => {
 			weather: weather,
 			camper_count: parseInt(count),
 		});
-		try {
-			let res = await fetch(API_URL, {
-				method: "PATCH",
-				body: data,
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-			});
-
-			let response = await res.json();
-			if (response["success"] !== true) {
-				console.log(response);
-				throw new Error();
-			}
-			alert(response["detail"]);
-			resetModalData();
-		} catch {
-			alert(
-				"An unexpected error occured while trying to create a record please try again later"
-			);
+		if (modalData.recordId) {
+			editOneRecord(modalData.recordId, data);
 		}
-	};
 
-	const getOneRecord = async (recordId: number) => {
-		const API_URL = `http://127.0.0.1:8443/api/v1/records/?record_id=${recordId}&convert_timestamp=true`;
-		try {
-			let res = await fetch(API_URL, {
-				method: "GET",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-			});
-			let res_data = await res.json();
-			if (res_data["success"] === false) {
-				alert("error api skill issue");
-			}
-			return res_data["record"];
-		} catch {
-			alert("Failed to make a request. Please check api is up.");
-		}
-	};
+		resetModalData();
+	}
 
-	const deleteRecord = async (recordId: number) => {
-		if (!window.confirm("Delete the item?")) {
-			return alert("Ok not deleting");
+	async function deleteRecord(recordId: number) {
+		if (!window.confirm("Are you sure you want to delete this?")) {
+			return alert("Record Deletion Canceled");
 		}
-		const API_URL = `http://localhost:8443/api/v1/records/?record_id=${recordId}`;
-		try {
-			let res = await fetch(API_URL, {
-				method: "DELETE",
-				headers: {
-					Accept: "application/json",
-					"Content-Type": "application/json",
-				},
-			});
-			let res_data = await res.json();
-			if (res_data["success"] === false) {
-				alert("error api skill issue");
-			}
-			alert(res_data["detail"]);
-		} catch {
-			alert("Failed to make a request. Please check api is up.");
-		}
-	};
+		deleteOneRecord(recordId);
+	}
 
-	const resetModalData = () => {
+	async function resetModalData() {
 		setModalData({ showModal: false, recordId: null, data: null });
+
 		setName("");
 		setLocation("");
 		setWeather("");
 		setCount("");
-	};
+	}
 
-	const editMoreCallback = async (recordId: number) => {
+	async function editMoreCallback(recordId: number) {
+		let data = await getOneRecord(recordId);
+
 		resetModalData();
 
-		let data = await getOneRecord(recordId);
 		setModalData({ showModal: true, recordId, data });
 		setName(data.name);
 		setLocation(data.location);
 		setWeather(data.weather);
 		setCount(data.camper_count);
-	};
+	}
 
 	return (
 		<div className="flex flex-col items-center justify-center rounded-xl overflow-hidden">

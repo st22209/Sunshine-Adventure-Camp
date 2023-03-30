@@ -1,5 +1,3 @@
-import React from "react";
-import { Link } from "react-router-dom";
 const Home = () => {
 	return (
 		<div className="flex flex-col text-center items-center">
@@ -29,5 +27,5 @@ const Home = () => {
 		</div>
 	);
 };
-0;
+
 export default Home;

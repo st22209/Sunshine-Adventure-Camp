@@ -1,27 +1,20 @@
 import { useState, useEffect } from "react";
-import getData from "./getData";
+import { refreshDataLoop } from "./requests";
+
 function Logs() {
-	interface dataTypes {
-		location: string;
-		weather: string;
-		name: string;
-		camper_count: number;
+	interface Record {
 		id: string;
+		name: string;
+		weather: string;
+		location: string;
 		timestamp: number;
+		camper_count: number;
 	}
 
-	type dataType = Array<dataTypes>;
-	const [data, setData] = useState<dataType>([]);
+	type recordList = Array<Record>;
+	const [data, setData] = useState<recordList>([]);
 
-	useEffect(() => {
-		getData(setData);
-		let interval = setInterval(() => {
-			getData(setData);
-		}, 5000); // make a request every 5 sec to check for new logs
-		return () => {
-			clearInterval(interval);
-		};
-	}, []);
+	useEffect(() => refreshDataLoop(setData), []);
 
 	return (
 		<div className="bg-red-600">
