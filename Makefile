@@ -15,3 +15,7 @@ run_api:
 
 run_gui:
 	@cd app; npm run dev
+
+setup:
+	@pip install -r api/src/requirements.txt
+	@cd app; npm install; cd ..

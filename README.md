@@ -16,3 +16,21 @@ You need to write a program that stores the required details. It also needs the
 ability to delete the details if the camp is moving on, or kept if not moving on.
 Your program must use an updateable list and a GUI.
 Write the program. Make sure you include good comments and use constants.
+
+
+### How to run:
+
+First install all the dependencies with:
+```
+make setup
+```
+
+Now go back to the project directory (same directory as Makefile)  
+Now open up a terminal and startup the api using:
+```
+make run_api
+```
+And lastly open another terminal window (without closing the first one) to run the gui
+```
+make run_gui
+```
