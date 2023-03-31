@@ -155,7 +155,7 @@ const View = () => {
 										>
 											{new Date(
 												record.timestamp
-											).toLocaleString()}
+											).toLocaleString("en-NZ")}
 										</th>
 										<td className="px-6 py-4">
 											{record.name.length < 70

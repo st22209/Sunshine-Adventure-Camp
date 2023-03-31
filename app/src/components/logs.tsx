@@ -34,7 +34,7 @@ function Logs() {
 					{data.slice(1).map((record, idx) => {
 						return (
 							<li key={idx} className="w-full p-4 bg-white">
-								{new Date(record.timestamp).toLocaleString()}:{" "}
+								{new Date(record.timestamp).toLocaleString("en-NZ")}:{" "}
 								{record.name} is at {record.location} with{" "}
 								{record.camper_count} campers and the weather
 								conditions there are {record.weather}
