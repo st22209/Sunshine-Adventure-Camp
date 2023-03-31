@@ -7,15 +7,17 @@ For the website I used react as I have some expirience with it and i HATE tkinte
 ## Directory Structure
 ```bash
 ├── src
-│   ├── App.tsx # this file manages routing and animation between pages
-│   ├── components # all pages are in this folder
-│   │   ├── create.tsx # code for the create new record page
-│   │   ├── getData.ts # code to get data from the api 
-│   │   ├── home.tsx # code for the home page
-│   │   ├── index.ts # kinda like a __init__.py but in ts
-│   │   ├── logs.tsx # code for the logs page
-│   │   └── view.tsx # code for the view data table page
-│   ├── index.css # base css (just sets the background)
-│   ├── index.tsx # starts the react app
-│   └── vite-env.d.ts
+│   ├── App.tsx # this file manages routing and animation between pages
+│   ├── components  # this folder contains all the components and pages
+│   │   ├── create.tsx # this is the code for the radio-in page
+│   │   ├── createRecordForm.tsx # this is the create record form that is shown on the radio in page
+│   │   ├── events.ts # this file contains code to handle the event of creating a record
+│   │   ├── home.tsx # this is the homepage which is just 3 buttons taking you to the pages
+│   │   ├── index.ts # this file is kinda like an __init__.py file but the typescript version
+│   │   ├── logs.tsx # this is the code for the logs page
+│   │   ├── requests.ts # this file contains code to make http requests to the REST API
+│   │   └── view.tsx # this file contains the main table data viewing page
+│   ├── index.css # this is some base css basically justs sets the background
+│   ├── index.tsx # this file starts the react app
+│   └── vite-env.d.ts # another config file to ignore
 ```
